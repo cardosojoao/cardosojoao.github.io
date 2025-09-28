@@ -1,11 +1,11 @@
 ---
-title: Violet post #1
-description: Violet development journal
-slug: Violet development diary #1
-date: 2023-06-06 00:00:00+0000
+title: My developmen environment
+description: Take a look at my development environment, 64-bit tools delivering 8-bit magic—because in tech, everything happens in powers of two.
+slug: development environment
+date: 2025-08-28 00:00:00+0000
 image: cover.jpg
 categories:
-    - violet
+    - general
 tags:
     - development
 weight: 1       # You can add weight to some posts to override the default sorting (date descending)
