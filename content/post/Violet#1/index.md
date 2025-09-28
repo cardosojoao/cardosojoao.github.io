@@ -1,13 +1,13 @@
 ---
-title: Hello World
-description: Welcome to Hugo Theme Stack
-slug: hello-world
-date: 2022-03-06 00:00:00+0000
-image: cover.jpg
+title: Violet post \#1
+description: Violet development journal
+slug: Violet development diary \#1
+date: 2023-06-06 00:00:00+0000
+image: cover.png
 categories:
-    - Example Category
+    - violet
 tags:
-    - Example Tag
+    - development
 weight: 1       # You can add weight to some posts to override the default sorting (date descending)
 ---
 
