@@ -69,7 +69,7 @@ I supercharge VSCode with a curated set of extensions that elevate Z80 assembly 
 
 My favourite extension makes debugging easier and more powerful than ever—it’s like a Swiss Army knife for developers.
 
-[https://marketplace.visualstudio.com/items?itemName=maziac.dezog}(https://marketplace.visualstudio.com/items?itemName=maziac.dezog)
+[https://marketplace.visualstudio.com/items?itemName=maziac.dezog](https://marketplace.visualstudio.com/items?itemName=maziac.dezog)
 
 ---
 
