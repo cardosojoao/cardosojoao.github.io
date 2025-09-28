@@ -103,16 +103,15 @@ Forget the T-state cheat sheet, instantly see instruction cycles and byte sizes 
 
 There’s a massive amount of information out there, you just need to know where to look. Here’s my curated list of the essentials.
 
--https://www.specnext.com/
--Spectrum Next discord server
--https://luckyredfish.com/
--https://zx.remysharp.com/
--Jim Bagley tutorials https://www.youtube.com/watch?v=Nphrf14ZRpI&list=PLK49nPX3nslseUVUj_ZYk7YL95-v4LlLY
--https://www.assemblytutorial.com/
--http://z80-heaven.wikidot.com/math
--https://www.patreon.com/c/u27217558/home
--https://www.patreon.com/c/mikedailly/posts
-
+- https://www.specnext.com/
+- Spectrum Next discord server
+- https://luckyredfish.com/
+- https://zx.remysharp.com/
+- Jim Bagley tutorials https://www.youtube.com/watch?v=Nphrf14ZRpI&list=PLK49nPX3nslseUVUj_ZYk7YL95-v4LlLY
+- https://www.assemblytutorial.com/
+- http://z80-heaven.wikidot.com/math
+- https://www.patreon.com/c/u27217558/home
+- https://www.patreon.com/c/mikedailly/posts
 
 ---
 
