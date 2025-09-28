@@ -65,8 +65,55 @@ I supercharge VSCode with a curated set of extensions that elevate Z80 assembly 
 
 ---
 
-For more information about this theme, check the documentation: https://stack.jimmycai.com/
+**DeZog** is a powerful Z80 debugger plugin for VSCode, offering advanced tools to make Spectrum Next development efficient and precise.
 
-Want a site like this? Check out [hugo-theme-stack-stater](https://github.com/CaiJimmy/hugo-theme-stack-starter)
+My favourite extension makes debugging easier and more powerful than ever—it’s like a Swiss Army knife for developers.
 
-> Photo by [Pawel Czerwinski](https://unsplash.com/@pawel_czerwinski) on [Unsplash](https://unsplash.com/)
+[https://marketplace.visualstudio.com/items?itemName=maziac.dezog}(https://marketplace.visualstudio.com/items?itemName=maziac.dezog)
+
+---
+
+**NEX-FileViewer** adds a readonly file viewer for ZX Spectrum NEX files. .nex is a special file format for loading ZX Next programs. The viewer shows registers, a memory dump and the included screen images.
+
+[https://marketplace.visualstudio.com/items?itemName=maziac.nex-fileviewer](https://marketplace.visualstudio.com/items?itemName=maziac.nex-fileviewer)
+
+---
+
+**Z80 Assembly meters** meters clock cycles and bytecode size from Z80 assembly source code.
+
+Forget the T-state cheat sheet, instantly see instruction cycles and byte sizes as you code.
+
+[https://marketplace.visualstudio.com/items?itemName=theNestruo.z80-asm-meter](https://marketplace.visualstudio.com/items?itemName=theNestruo.z80-asm-meter)
+
+---
+
+**Z80 Instruction Set** Provides documentation of the Z80 instructions on hovering.
+
+[https://marketplace.visualstudio.com/items?itemName=maziac.z80-instruction-set](https://marketplace.visualstudio.com/items?itemName=maziac.z80-instruction-set)
+
+---
+
+**Todo** Tree Show TODO, FIXME, etc. comment tags in a tree view
+
+[https://marketplace.visualstudio.com/items?itemName=Gruntfuggly.todo-tree](https://marketplace.visualstudio.com/items?itemName=Gruntfuggly.todo-tree)
+
+---
+
+## Resources ##
+
+There’s a massive amount of information out there, you just need to know where to look. Here’s my curated list of the essentials.
+
+-https://www.specnext.com/
+-Spectrum Next discord server
+-https://luckyredfish.com/
+-https://zx.remysharp.com/
+-Jim Bagley tutorials https://www.youtube.com/watch?v=Nphrf14ZRpI&list=PLK49nPX3nslseUVUj_ZYk7YL95-v4LlLY
+-https://www.assemblytutorial.com/
+-http://z80-heaven.wikidot.com/math
+-https://www.patreon.com/c/u27217558/home
+-https://www.patreon.com/c/mikedailly/posts
+
+
+---
+
+These are the tools and resources that power my development workflow, but they’re by no means the only options out there. The Spectrum Next community is full of amazing alternatives, so explore, experiment, and find the setup that works best for you.
