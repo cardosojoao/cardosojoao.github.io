@@ -1,9 +1,9 @@
 ---
-title: Violet post \#1
+title: Violet post #1
 description: Violet development journal
-slug: Violet development diary \#1
+slug: Violet development diary #1
 date: 2023-06-06 00:00:00+0000
-image: cover.png
+image: cover.jpg
 categories:
     - violet
 tags:
