@@ -1,6 +1,6 @@
 ---
 title: Game Physics
-description: Behind the Scenes of Game Physics: The Power of Rigidbodies and Colliders.
+description: Behind the Scenes of Game Physics, The Power of Rigidbodies and Colliders.
 slug: Phsyics
 date: 2025-08-19 00:00:00+0000
 image: cover.jpg
