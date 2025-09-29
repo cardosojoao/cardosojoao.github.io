@@ -2,7 +2,7 @@
 title: Game Physics
 description: Behind the Scenes of Game Physics: The Power of Rigidbodies and Colliders.
 slug: Phsyics
-date: 2025-08-28 00:00:00+0000
+date: 2025-08-19 00:00:00+0000
 image: cover.jpg
 categories:
     - dot8
@@ -75,7 +75,9 @@ Key Insight: A Collider never moves objects — it only reports contacts.
 ---
 
 <video src="colliders.mp4" width="480" height="360" controls></video>
+
 See Colliders in action
+
 ---
 
 ### Why Keep Them Separate? ###
