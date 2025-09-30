@@ -1,7 +1,7 @@
 ---
 title: Dot8 - Engine Sub Systems
 description:  I break down the core subsystems that bring the engine to life. From physics and animation to camera control and asset loading, each part is designed with simplicity and performance in mind.
-slug: engine
+slug: engine-sub-system
 date: 2025-08-12 00:00:00+0000
 image: cover.jpg
 categories:
