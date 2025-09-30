@@ -69,4 +69,4 @@ The debug tools provide visibility into what’s happening inside the engine. Th
 
 ---
 
-As I bring all these systems together, I’m turning the dot8 retro game engine into my creative playground right now. Whether I’m debugging, exploring, or building brand new worlds, the engine lets me bring my ideas to life with excitement and ease. I’m proving that with smart design and a passion for games, even the simplest tools can make something truly fun—right here, in this very moment!
+As I bring all these systems together, I’m turning the dot8 retro game engine into my creative playground right now. Whether I’m debugging, exploring, or building brand new worlds, the engine lets me bring my ideas to life with excitement and ease. I’m proving that with smart design and a passion for games, even the simplest tools can make something truly fun—right here, in this very moment.
