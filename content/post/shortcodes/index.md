@@ -2,6 +2,7 @@
 title: Shortcodes
 description: Useful shortcodes that can be used in Markdown
 date: 2023-08-25 00:00:00+0000
+expiryDate: 2024-01-01T23:59:00Z
 image: cover.jpg
 ---
 

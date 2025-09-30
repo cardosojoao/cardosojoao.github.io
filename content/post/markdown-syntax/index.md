@@ -1,6 +1,7 @@
 ---
 title: Markdown Syntax Guide
 date: 2023-09-07
+expiryDate: 2024-01-01T23:59:00Z
 description: Sample article showcasing basic Markdown syntax and formatting for HTML elements.
 tags: 
     - markdown
