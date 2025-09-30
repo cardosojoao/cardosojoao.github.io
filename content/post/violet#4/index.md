@@ -3,7 +3,7 @@ title: dot8 - Entity Manager
 description: The Heart of My Game Engine. The Entity Manager.
 slug: engine
 date: 2025-08-04 00:00:00+0000
-image: cover.jpg
+image: cover4.jpg
 categories:
     - dot8
 tags:
