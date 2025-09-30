@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>General on Ping Projects</title><link>https://cardosojoao.github.io/categories/general/</link><description>Recent content in General on Ping Projects</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Thu, 28 Aug 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://cardosojoao.github.io/categories/general/index.xml" rel="self" type="application/rss+xml"/><item><title>My developmen environment</title><link>https://cardosojoao.github.io/p/development-environment/</link><pubDate>Thu, 28 Aug 2025 00:00:00 +0000</pubDate><guid>https://cardosojoao.github.io/p/development-environment/</guid><description>&lt;img src="https://cardosojoao.github.io/p/development-environment/cover.jpg" alt="Featured image of post My developmen environment" /&gt;&lt;p&gt;My development environment is based on windows desktop using VSCode as editor with a collections of extension and CSpect for ZX Spectrum Next Emulation and also ZX Spectrum Next hardware.&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://cardosojoao.github.io/p/development-environment/diagram.jpg"
+width="714"
+height="564"
+srcset="https://cardosojoao.github.io/p/development-environment/diagram_hu_779e3d044e5469d7.jpg 480w, https://cardosojoao.github.io/p/development-environment/diagram_hu_afdf4c4ff3d8027f.jpg 1024w"
+loading="lazy"
+alt="Diagram"
+class="gallery-image"
+data-flex-grow="126"
+data-flex-basis="303px"
+&gt;&lt;/p&gt;
+&lt;h2 id="tools"&gt;Tools
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;Visual Studio Code (VS Code)&lt;/strong&gt; is a lightweight, open-source, and highly extensible code editor from Microsoft that supports multiple programming languages, debugging, Git integration, and a rich ecosystem of extensions for efficient development.&lt;/p&gt;
+&lt;p&gt;&lt;a class="link" href="https://code.visualstudio.com/download" target="_blank" rel="noopener"
+&gt;https://code.visualstudio.com/download&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;sjasmplus&lt;/strong&gt; is a powerful Z80 assembler that provides advanced features and flexibility for Spectrum Next development.&lt;/p&gt;
+&lt;p&gt;&lt;a class="link" href="https://github.com/z00m128/sjasmplus" target="_blank" rel="noopener"
+&gt;https://github.com/z00m128/sjasmplus&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;CSpect&lt;/strong&gt; is a Spectrum Next emulator that delivers near full hardware accuracy, allowing software to run almost exactly as it would on the real machine.&lt;/p&gt;
+&lt;p&gt;&lt;a class="link" href="https://mdf200.itch.io/cspect" target="_blank" rel="noopener"
+&gt;https://mdf200.itch.io/cspect&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;GitHub&lt;/strong&gt; is a platform for hosting and collaborating on code projects, enabling version control and teamwork through Git in the cloud.&lt;/p&gt;
+&lt;p&gt;&lt;a class="link" href="https://github.com/" target="_blank" rel="noopener"
+&gt;https://github.com/&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;The &lt;strong&gt;ZX Spectrum Next&lt;/strong&gt; is a modern reimagining of the classic ZX Spectrum, offering enhanced hardware while staying true to the original’s spirit.&lt;/p&gt;
+&lt;p&gt;&lt;a class="link" href="https://www.specnext.com/" target="_blank" rel="noopener"
+&gt;https://www.specnext.com/&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;Hardware remote debug Remote&lt;/strong&gt; debugging from real hardware is possible by connecting the ZX Spectrum Next joystick port to your PC via USB.&lt;/p&gt;
+&lt;p&gt;&lt;a class="link" href="https://www.amazon.es/-/pt/dp/B07LH95J24/ref=sr_1_2?crid=HSHSJ9CA7249&amp;amp;dib=eyJ2IjoiMSJ9.H2BTHlbtWYfLfNArbbhQroLZCqfoI7oux5ocaU7n9rcAlC3sCrMTz0vHL07LuAE4L72wNA9C11wxCg91MTZJsUDNNKzjlC4J99_zfO6JobPzPYyzZFtvCf8W9StuiN7-jo34oEvN1_Eufq6wMj6j7DfhXexiKsoVj2ahs7HEIIvrfsKMeTXtTFJWm2eIelB3BS4Cdna8WDzVPd7IAauclGdGXdqjtieaBjKvvxqz1zbZM2SHdKMXmKXOS6FqonOodlwqiudBe9ZWL6CddIhdIRiH7aA2xbfzL9iB-vr-Sgs.G2ulRaKX4CxV3tMt7OXhfnqcd59YwsDFoZIKz5yAg4U&amp;amp;dib_tag=se&amp;amp;keywords=6&amp;#43;Pin&amp;#43;FTDI&amp;#43;FT232RL&amp;#43;USB&amp;#43;To&amp;#43;Serial&amp;#43;Adapter&amp;#43;m%C3%B3dulo&amp;#43;USB&amp;#43;TO&amp;#43;TTL&amp;#43;RS232&amp;#43;cabo&amp;amp;qid=1756330702&amp;amp;s=electronics&amp;amp;sprefix=6&amp;#43;pin&amp;#43;ftdi&amp;#43;ft232rl&amp;#43;usb&amp;#43;to&amp;#43;serial&amp;#43;adapter&amp;#43;m%C3%B3dulo&amp;#43;usb&amp;#43;to&amp;#43;ttl&amp;#43;rs232&amp;#43;cabo%2Celectronics%2C223&amp;amp;sr=1-2" target="_blank" rel="noopener"
+&gt;6 Pin FTDI FT232RL USB To Serial Adapter módulo USB TO TTL RS232 cabo&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="vscode-extensions"&gt;VSCode Extensions
+&lt;/h2&gt;&lt;p&gt;VSCode is the beating heart of my coding world, supercharged by countless plugins that make every development task smoother and more powerful.&lt;/p&gt;
+&lt;p&gt;I supercharge VSCode with a curated set of extensions that elevate Z80 assembly development to the same power and convenience as modern languages like C.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;ASM Code Lens&lt;/strong&gt; A language server that enables code lens, references, hover information, symbol renaming and the outline view for assembler files.&lt;/p&gt;
+&lt;p&gt;&lt;a class="link" href="https://marketplace.visualstudio.com/items?itemName=maziac.asm-code-lens" target="_blank" rel="noopener"
+&gt;https://marketplace.visualstudio.com/items?itemName=maziac.asm-code-lens&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;DeZog&lt;/strong&gt; is a powerful Z80 debugger plugin for VSCode, offering advanced tools to make Spectrum Next development efficient and precise.&lt;/p&gt;
+&lt;p&gt;My favourite extension makes debugging easier and more powerful than ever—it’s like a Swiss Army knife for developers.&lt;/p&gt;
+&lt;p&gt;&lt;a class="link" href="https://marketplace.visualstudio.com/items?itemName=maziac.dezog" target="_blank" rel="noopener"
+&gt;https://marketplace.visualstudio.com/items?itemName=maziac.dezog&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;NEX-FileViewer&lt;/strong&gt; adds a readonly file viewer for ZX Spectrum NEX files. .nex is a special file format for loading ZX Next programs. The viewer shows registers, a memory dump and the included screen images.&lt;/p&gt;
+&lt;p&gt;&lt;a class="link" href="https://marketplace.visualstudio.com/items?itemName=maziac.nex-fileviewer" target="_blank" rel="noopener"
+&gt;https://marketplace.visualstudio.com/items?itemName=maziac.nex-fileviewer&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;Z80 Assembly meters&lt;/strong&gt; meters clock cycles and bytecode size from Z80 assembly source code.&lt;/p&gt;
+&lt;p&gt;Forget the T-state cheat sheet, instantly see instruction cycles and byte sizes as you code.&lt;/p&gt;
+&lt;p&gt;&lt;a class="link" href="https://marketplace.visualstudio.com/items?itemName=theNestruo.z80-asm-meter" target="_blank" rel="noopener"
+&gt;https://marketplace.visualstudio.com/items?itemName=theNestruo.z80-asm-meter&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;Z80 Instruction Set&lt;/strong&gt; Provides documentation of the Z80 instructions on hovering.&lt;/p&gt;
+&lt;p&gt;&lt;a class="link" href="https://marketplace.visualstudio.com/items?itemName=maziac.z80-instruction-set" target="_blank" rel="noopener"
+&gt;https://marketplace.visualstudio.com/items?itemName=maziac.z80-instruction-set&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;Todo&lt;/strong&gt; Tree Show TODO, FIXME, etc. comment tags in a tree view&lt;/p&gt;
+&lt;p&gt;&lt;a class="link" href="https://marketplace.visualstudio.com/items?itemName=Gruntfuggly.todo-tree" target="_blank" rel="noopener"
+&gt;https://marketplace.visualstudio.com/items?itemName=Gruntfuggly.todo-tree&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="resources"&gt;Resources
+&lt;/h2&gt;&lt;p&gt;There’s a massive amount of information out there, you just need to know where to look. Here’s my curated list of the essentials.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://www.specnext.com/" target="_blank" rel="noopener"
+&gt;https://www.specnext.com/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Spectrum Next discord server&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://luckyredfish.com/" target="_blank" rel="noopener"
+&gt;https://luckyredfish.com/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://zx.remysharp.com/" target="_blank" rel="noopener"
+&gt;https://zx.remysharp.com/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=Nphrf14ZRpI&amp;amp;list=PLK49nPX3nslseUVUj_ZYk7YL95-v4LlLY" target="_blank" rel="noopener"
+&gt;Jim Bagley tutorials&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://www.assemblytutorial.com/" target="_blank" rel="noopener"
+&gt;https://www.assemblytutorial.com/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="http://z80-heaven.wikidot.com/math" target="_blank" rel="noopener"
+&gt;http://z80-heaven.wikidot.com/math&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://www.patreon.com/c/u27217558/home" target="_blank" rel="noopener"
+&gt;https://www.patreon.com/c/u27217558/home&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://www.patreon.com/c/mikedailly/posts" target="_blank" rel="noopener"
+&gt;https://www.patreon.com/c/mikedailly/posts&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;p&gt;These are the tools and resources that power my development workflow, but they’re by no means the only options out there. The Spectrum Next community is full of amazing alternatives, so explore, experiment, and find the setup that works best for you.&lt;/p&gt;</description></item></channel></rss>
