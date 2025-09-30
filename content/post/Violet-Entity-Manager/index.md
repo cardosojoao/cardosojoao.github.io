@@ -73,25 +73,25 @@ The Timer component is used to trigger events after a specified number of frames
 
 The Path component moves a game object along a predefined series of points, creating automated. It supports a custom speed, directional travel, and options to run once, loop, or ping-pong back and forth.
 
-```
+```text
 
- struct	Object
-ID			    db	0	
-Tag			    db	0	
-Flags			db	0	
-PosX			dw	0	
-PosY			dw	0	
-Parent			db	0	
-State			db	0	
-FSM			    dw	0	
-SpriteComp		db	0	
-PhysicComp		db	0	
-AnimationComp	db	0	
-ColliderComp	db	0	
-PathComp		db	0	
-TimerComp		db	0	
-	ends
-
+ struct Object
+ID              db  0
+Tag             db  0
+Flags           db  0
+PosX            dw  0
+PosY            dw  0
+Parent          db  0
+State           db  0
+FSM             dw  0
+SpriteComp      db  0
+PhysicComp      db  0
+AnimationComp   db  0
+ColliderComp    db  0
+PathComp        db  0
+TimerComp       db  0
+    ends
+    
 ```
 
 The **Object** structure holds all the key data for each entity in the game. It is stored as a fixed-size block in memory, making it easy and fast to access in assembly. This simple layout helps the engine update and draw many objects efficiently, while keeping the code clean and organized.

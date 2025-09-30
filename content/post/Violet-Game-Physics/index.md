@@ -12,6 +12,7 @@ weight: 1
 ---
 
 ## Inside the dot8 Physics Engine ##
+
 Building a physics engine isn’t just about moving objects—it’s about creating a consistent and believable world. Rigidbodies define how objects react to forces, gravity, and collisions, while colliders determine the shape and boundaries for those interactions. Together, they form the backbone of any physics simulation, enabling everything from subtle character movement to complex dynamic environments. Understanding how these components work together is key for developers who want precision, performance, and realism in their games. Mastering these fundamentals isn’t just a technical skill—it’s what transforms code into immersive experiences.
 
 ### Rigidbody: Motion in Action ###
@@ -24,22 +25,23 @@ A Rigidbody defines how an entity moves in the game world:
 - Damping/Friction - Gradually reduces speed for smooth stops.
 - Integration Step - Updates position each frame with a fixed timestep.
 
-```
-struct	Rigidbody
-ID			            db	0
-ObjectID		        db	0
-Flags			        db	0
-VelocityX		        dw	0
-VelocityY		        dw	0
-AccelerationX		    dw	0
-AccelerationY		    dw	0
-FrictionX		        dw	0
-FrictionY		        dw	0
-ConstantAcceleration	dw	0
-ForceDuration	    	db	0
-State			        db	0
-FSM			            dw	0
-	ends
+```text
+struct Rigidbody
+ID                      db  0
+ObjectID                db  0
+Flags                   db  0
+VelocityX               dw  0
+VelocityY               dw  0
+AccelerationX           dw  0
+AccelerationY           dw  0
+FrictionX               dw  0
+FrictionY               dw  0
+ConstantAcceleration    dw  0
+ForceDuration           db  0
+State                   db  0
+FSM                     dw  0
+    ends
+
 ```
 
 Key Insight: A Rigidbody doesn’t detect collisions — it only updates position based on forces.
@@ -56,20 +58,21 @@ Key Insight: A Rigidbody doesn’t detect collisions — it only updates positio
 - Layer/Mask - Filters what this collider interacts with (e.g., Player layer vs. Enemy layer).
 - Response - None (for triggers) or simple reaction (bounce, stop).
 
-```
+```text
  struct Collider
-ID			db	0
-ObjectID		db	0
-Flags			db	0
-OffsetX			db	0
-OffsetY			db	0
-Width			db	0
-Height			db	0
-Layer			db	0
-EventCollision	        dw	0
-EventTrigger	        dw	0
-	ends
+ID              db  
+ObjectID        db  0
+Flags           db  0
+OffsetX         db  0
+OffsetY         db  0
+Width           db  0
+Height          db  0
+Layer           db  0
+EventCollision  dw  0
+EventTrigger    db  0
+    ends
 ```
+
 Key Insight: A Collider never moves objects — it only reports contacts.
 
 ---

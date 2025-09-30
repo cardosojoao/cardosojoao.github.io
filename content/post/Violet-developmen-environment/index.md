@@ -16,12 +16,13 @@ My development environment is based on windows desktop using VSCode as editor wi
 ![Diagram](diagram.jpg)
 
 ## Tools ##
+
 **Visual Studio Code (VS Code)** is a lightweight, open-source, and highly extensible code editor from Microsoft that supports multiple programming languages, debugging, Git integration, and a rich ecosystem of extensions for efficient development.
 
  [https://code.visualstudio.com/download](https://code.visualstudio.com/download)
 
  ---
- 
+
  **sjasmplus** is a powerful Z80 assembler that provides advanced features and flexibility for Spectrum Next development.
 
 [https://github.com/z00m128/sjasmplus](https://github.com/z00m128/sjasmplus)
@@ -48,8 +49,7 @@ The **ZX Spectrum Next** is a modern reimagining of the classic ZX Spectrum, off
 
 **Hardware remote debug Remote** debugging from real hardware is possible by connecting the ZX Spectrum Next joystick port to your PC via USB.
 
-[6 Pin FTDI FT232RL USB To Serial Adapter módulo USB 
-TO TTL RS232 cabo](https://www.amazon.es/-/pt/dp/B07LH95J24/ref=sr_1_2?crid=HSHSJ9CA7249&dib=eyJ2IjoiMSJ9.H2BTHlbtWYfLfNArbbhQroLZCqfoI7oux5ocaU7n9rcAlC3sCrMTz0vHL07LuAE4L72wNA9C11wxCg91MTZJsUDNNKzjlC4J99_zfO6JobPzPYyzZFtvCf8W9StuiN7-jo34oEvN1_Eufq6wMj6j7DfhXexiKsoVj2ahs7HEIIvrfsKMeTXtTFJWm2eIelB3BS4Cdna8WDzVPd7IAauclGdGXdqjtieaBjKvvxqz1zbZM2SHdKMXmKXOS6FqonOodlwqiudBe9ZWL6CddIhdIRiH7aA2xbfzL9iB-vr-Sgs.G2ulRaKX4CxV3tMt7OXhfnqcd59YwsDFoZIKz5yAg4U&dib_tag=se&keywords=6+Pin+FTDI+FT232RL+USB+To+Serial+Adapter+m%C3%B3dulo+USB+TO+TTL+RS232+cabo&qid=1756330702&s=electronics&sprefix=6+pin+ftdi+ft232rl+usb+to+serial+adapter+m%C3%B3dulo+usb+to+ttl+rs232+cabo%2Celectronics%2C223&sr=1-2)
+[6 Pin FTDI FT232RL USB To Serial Adapter módulo USB TO TTL RS232 cabo](https://www.amazon.es/-/pt/dp/B07LH95J24/ref=sr_1_2?crid=HSHSJ9CA7249&dib=eyJ2IjoiMSJ9.H2BTHlbtWYfLfNArbbhQroLZCqfoI7oux5ocaU7n9rcAlC3sCrMTz0vHL07LuAE4L72wNA9C11wxCg91MTZJsUDNNKzjlC4J99_zfO6JobPzPYyzZFtvCf8W9StuiN7-jo34oEvN1_Eufq6wMj6j7DfhXexiKsoVj2ahs7HEIIvrfsKMeTXtTFJWm2eIelB3BS4Cdna8WDzVPd7IAauclGdGXdqjtieaBjKvvxqz1zbZM2SHdKMXmKXOS6FqonOodlwqiudBe9ZWL6CddIhdIRiH7aA2xbfzL9iB-vr-Sgs.G2ulRaKX4CxV3tMt7OXhfnqcd59YwsDFoZIKz5yAg4U&dib_tag=se&keywords=6+Pin+FTDI+FT232RL+USB+To+Serial+Adapter+m%C3%B3dulo+USB+TO+TTL+RS232+cabo&qid=1756330702&s=electronics&sprefix=6+pin+ftdi+ft232rl+usb+to+serial+adapter+m%C3%B3dulo+usb+to+ttl+rs232+cabo%2Celectronics%2C223&sr=1-2)
 
 ---
 
@@ -103,15 +103,15 @@ Forget the T-state cheat sheet, instantly see instruction cycles and byte sizes 
 
 There’s a massive amount of information out there, you just need to know where to look. Here’s my curated list of the essentials.
 
-- https://www.specnext.com/
+- [https://www.specnext.com/](https://www.specnext.com/)
 - Spectrum Next discord server
-- https://luckyredfish.com/
-- https://zx.remysharp.com/
-- Jim Bagley tutorials https://www.youtube.com/watch?v=Nphrf14ZRpI&list=PLK49nPX3nslseUVUj_ZYk7YL95-v4LlLY
-- https://www.assemblytutorial.com/
-- http://z80-heaven.wikidot.com/math
-- https://www.patreon.com/c/u27217558/home
-- https://www.patreon.com/c/mikedailly/posts
+- [https://luckyredfish.com/](https://luckyredfish.com/)
+- [https://zx.remysharp.com/](https://zx.remysharp.com/)
+- [Jim Bagley tutorials](https://www.youtube.com/watch?v=Nphrf14ZRpI&list=PLK49nPX3nslseUVUj_ZYk7YL95-v4LlLY)
+- [https://www.assemblytutorial.com/](https://www.assemblytutorial.com/)
+- [http://z80-heaven.wikidot.com/math](http://z80-heaven.wikidot.com/math)
+- [https://www.patreon.com/c/u27217558/home](https://www.patreon.com/c/u27217558/home)
+- [https://www.patreon.com/c/mikedailly/posts](https://www.patreon.com/c/mikedailly/posts)
 
 ---
 
