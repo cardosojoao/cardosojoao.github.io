@@ -1,5 +1,5 @@
 ---
-title: function call page memory auto mappig
+title: function call page memory auto mapping
 description: Managing Function Calls Across Paged Memory on the Spectrum Next.
 slug: proxy_call
 date: 2025-10-30 00:00:00+0000
