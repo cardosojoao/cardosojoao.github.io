@@ -1,7 +1,7 @@
 ---
 title:  When 8KB Isn’t Enough
-description: When 8KB Isn’t Enough: Rethinking My Spectrum Next Engine
-slug: proxy_call
+description: When 8KB Isn’t Enough, Rethinking My Spectrum Next Engine
+slug: 8k_page
 date: 2025-10-26 00:00:00+0000
 image: cover.jpg
 categories:
