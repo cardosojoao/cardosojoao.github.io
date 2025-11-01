@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>General on Ping Projects</title><link>https://cardosojoao.github.io/categories/general/</link><description>Recent content in General on Ping Projects</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Thu, 30 Oct 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://cardosojoao.github.io/categories/general/index.xml" rel="self" type="application/rss+xml"/><item><title>function call page memory auto mapping</title><link>https://cardosojoao.github.io/p/proxy_call/</link><pubDate>Thu, 30 Oct 2025 00:00:00 +0000</pubDate><guid>https://cardosojoao.github.io/p/proxy_call/</guid><description>&lt;img src="https://cardosojoao.github.io/p/proxy_call/cover_proxy_call.jpg" alt="Featured image of post function call page memory auto mapping" /&gt;&lt;p&gt;During the resolution of my core engine growing beyond 8 KB, I analyzed the impact of splitting the engine into multiple functional blocks — for example, physics, render, and input. While exploring that approach, I also considered allowing the engine core to page itself in and out, dynamically loading the needed memory bank before calling a specific function. Although that design was later dropped, I decided to keep the prototype paging routine for a similar purpose.&lt;/p&gt;
+&lt;p&gt;The goal is to call functions that may reside in different memory pages, automatically page in the required 8 KB block, execute the function, and then restore the previous mapping. This approach allows managing up to eight 8 KB pages (64 KB total), each mapped into bank #0 as needed.&lt;/p&gt;
+&lt;h2 id="address-structure"&gt;Address Structure
+&lt;/h2&gt;&lt;p&gt;As mentioned in a previous article, the Z80 address bus is 16-bit, which allows addressing 64 KB at once. To identify both the memory page and the function address, we can split the 16-bit address this way:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Bits&lt;/th&gt;
+&lt;th&gt;Meaning&lt;/th&gt;
+&lt;th&gt;Range&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;15–13&lt;/td&gt;
+&lt;td&gt;Page index&lt;/td&gt;
+&lt;td&gt;0 – 7&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;12–0&lt;/td&gt;
+&lt;td&gt;Function address&lt;/td&gt;
+&lt;td&gt;0 – 8191&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Each 8 KB page contains 8192 bytes (2¹³), so the top 3 bits of a 16-bit value can define which page to load, and the lower 13 bits specify the address within that page.&lt;/p&gt;
+&lt;p&gt;This means functions must be compiled to execute in bank #0, since only that slot is dynamically paged.&lt;/p&gt;
+&lt;h2 id="function-definition-example"&gt;Function definition example
+&lt;/h2&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;span class="lnt"&gt;13
+&lt;/span&gt;&lt;span class="lnt"&gt;14
+&lt;/span&gt;&lt;span class="lnt"&gt;15
+&lt;/span&gt;&lt;span class="lnt"&gt;16
+&lt;/span&gt;&lt;span class="lnt"&gt;17
+&lt;/span&gt;&lt;span class="lnt"&gt;18
+&lt;/span&gt;&lt;span class="lnt"&gt;19
+&lt;/span&gt;&lt;span class="lnt"&gt;20
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-text" data-lang="text"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;mmu $0000, DEBUG_BANK
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; org $0000
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;@Proxy_Show_Collider equ (Proxy_Bank&amp;lt;&amp;lt;13)+Debug_Show_Collider
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Debug_Show_Collider:
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; ld hl, Collider_Active_Cache
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;.Loop:
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; ld a, (hl)
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; ld iyl, a
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; inc hl
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; ld a, (hl)
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; inc hl
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; ld iyh, a
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; or iyl
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; ret z
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; push hl
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; call Debug.DrawCollider
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; pop hl
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; jr .Loop
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;The function itself isn’t important — what matters is the structure. The label @Proxy_Show_Collider follows the defined format: top 3 bits = page index, remaining 13 bits = function address.&lt;/p&gt;
+&lt;h2 id="example-call"&gt;Example Call
+&lt;/h2&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-text" data-lang="text"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; call ProxyCall
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; dw @Proxy_Show_Collider
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; call CleanData
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;The ProxyCall routine interprets the function pointer, pages in the correct page into bank #0, calls the target function, and restores the previous page afterward.&lt;/p&gt;
+&lt;h2 id="the-proxycall-routine"&gt;The ProxyCall Routine
+&lt;/h2&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;span class="lnt"&gt;13
+&lt;/span&gt;&lt;span class="lnt"&gt;14
+&lt;/span&gt;&lt;span class="lnt"&gt;15
+&lt;/span&gt;&lt;span class="lnt"&gt;16
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-text" data-lang="text"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;;------------------------------------------------------------
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;; ProxyCall
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;; Dynamically pages in the target bank and calls its function
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;;------------------------------------------------------------
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;; Expected:
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;; (SP) → proxy call function address (ppp aaaaaaaaaaaaa)
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;; p = page 0..7, a = 0..8191
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ProxyCall:
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; pop hl
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; ld e, (hl)
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; inc hl
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; ld d, (hl)
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; inc hl
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; push hl
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;We use a call instruction to reach this routine, so the next instruction’s address (the return address) is already on the stack, by popping it into HL, reading the following word into DE, and pushing HL back, we obtain the target function address while preserving the return address.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-text" data-lang="text"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; ld hl, (SLOT_0000)
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; push hl
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; push af
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; ex de, hl
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; ld a, h
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; add a, a
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; adc a, a
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; adc a, a
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; adc a, a
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; and %00000111
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; add PROXY_BASE_BANK
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; call setbank0000_8k
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Here we store the current page in use by bank #0, preserve register A, extract the page index from the top bits of H, and map the corresponding page.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-text" data-lang="text"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; ld a, h
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; and %00011111
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; ld h, a
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;his ensures that only the lower 13 bits of HL remain — the actual function address.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-text" data-lang="text"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; pop af
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; call Call_hl
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;After restoring register A, we call Call_hl, which is a simple jp (hl) — effectively acting as a call (hl) pseudo-opcode.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-text" data-lang="text"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; pop hl
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; jp setbanks0000_hl
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Finally, we restore the original bank to slot #0 and return execution to the next instruction (call CleanData in the example).&lt;/p&gt;
+&lt;h2 id="example-of-equivalent-inline-bank-switch"&gt;Example of Equivalent Inline Bank Switch
+&lt;/h2&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-text" data-lang="text"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; ld a, (SLOT_0000)
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; push af
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; ld a, $00
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; call setbank0000_8k
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; ;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; ; routine code
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; ;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; pop af
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; call setbank0000_8k
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; ret
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h2 id="performance-notes"&gt;Performance Notes
+&lt;/h2&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Call Type&lt;/th&gt;
+&lt;th&gt;Size&lt;/th&gt;
+&lt;th&gt;T-States&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;ProxyCall&lt;/td&gt;
+&lt;td&gt;31 bytes&lt;/td&gt;
+&lt;td&gt;167 t-states&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;Regular call&lt;/td&gt;
+&lt;td&gt;14 bytes&lt;/td&gt;
+&lt;td&gt;85 t-states&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;The proxy adds roughly 82 extra t-states but saves 11 bytes per function, which is a reasonable trade-off for infrequently called routines.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="closing-thoughts"&gt;Closing Thoughts
+&lt;/h2&gt;&lt;p&gt;This proxy-based approach adds flexibility for managing large engines that exceed 8 KB while keeping the main memory footprint small. Although not ideal for performance-critical routines, it’s a clean and modular way to access code spread across multiple pages — an elegant solution for large Z80 projects like the Spectrum Next.&lt;/p&gt;</description></item><item><title>My developmen environment</title><link>https://cardosojoao.github.io/p/development-environment/</link><pubDate>Thu, 28 Aug 2025 00:00:00 +0000</pubDate><guid>https://cardosojoao.github.io/p/development-environment/</guid><description>&lt;img src="https://cardosojoao.github.io/p/development-environment/cover.jpg" alt="Featured image of post My developmen environment" /&gt;&lt;p&gt;My development environment is based on windows desktop using VSCode as editor with a collections of extension and CSpect for ZX Spectrum Next Emulation and also ZX Spectrum Next hardware.&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://cardosojoao.github.io/p/development-environment/diagram.jpg"
+width="714"
+height="564"
+srcset="https://cardosojoao.github.io/p/development-environment/diagram_hu_779e3d044e5469d7.jpg 480w, https://cardosojoao.github.io/p/development-environment/diagram_hu_afdf4c4ff3d8027f.jpg 1024w"
+loading="lazy"
+alt="Diagram"
+class="gallery-image"
+data-flex-grow="126"
+data-flex-basis="303px"
+&gt;&lt;/p&gt;
+&lt;h2 id="tools"&gt;Tools
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;Visual Studio Code (VS Code)&lt;/strong&gt; is a lightweight, open-source, and highly extensible code editor from Microsoft that supports multiple programming languages, debugging, Git integration, and a rich ecosystem of extensions for efficient development.&lt;/p&gt;
+&lt;p&gt;&lt;a class="link" href="https://code.visualstudio.com/download" target="_blank" rel="noopener"
+&gt;https://code.visualstudio.com/download&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;sjasmplus&lt;/strong&gt; is a powerful Z80 assembler that provides advanced features and flexibility for Spectrum Next development.&lt;/p&gt;
+&lt;p&gt;&lt;a class="link" href="https://github.com/z00m128/sjasmplus" target="_blank" rel="noopener"
+&gt;https://github.com/z00m128/sjasmplus&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;CSpect&lt;/strong&gt; is a Spectrum Next emulator that delivers near full hardware accuracy, allowing software to run almost exactly as it would on the real machine.&lt;/p&gt;
+&lt;p&gt;&lt;a class="link" href="https://mdf200.itch.io/cspect" target="_blank" rel="noopener"
+&gt;https://mdf200.itch.io/cspect&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;GitHub&lt;/strong&gt; is a platform for hosting and collaborating on code projects, enabling version control and teamwork through Git in the cloud.&lt;/p&gt;
+&lt;p&gt;&lt;a class="link" href="https://github.com/" target="_blank" rel="noopener"
+&gt;https://github.com/&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;The &lt;strong&gt;ZX Spectrum Next&lt;/strong&gt; is a modern reimagining of the classic ZX Spectrum, offering enhanced hardware while staying true to the original’s spirit.&lt;/p&gt;
+&lt;p&gt;&lt;a class="link" href="https://www.specnext.com/" target="_blank" rel="noopener"
+&gt;https://www.specnext.com/&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;Hardware remote debug Remote&lt;/strong&gt; debugging from real hardware is possible by connecting the ZX Spectrum Next joystick port to your PC via USB.&lt;/p&gt;
+&lt;p&gt;&lt;a class="link" href="https://www.amazon.es/-/pt/dp/B07LH95J24/ref=sr_1_2?crid=HSHSJ9CA7249&amp;amp;dib=eyJ2IjoiMSJ9.H2BTHlbtWYfLfNArbbhQroLZCqfoI7oux5ocaU7n9rcAlC3sCrMTz0vHL07LuAE4L72wNA9C11wxCg91MTZJsUDNNKzjlC4J99_zfO6JobPzPYyzZFtvCf8W9StuiN7-jo34oEvN1_Eufq6wMj6j7DfhXexiKsoVj2ahs7HEIIvrfsKMeTXtTFJWm2eIelB3BS4Cdna8WDzVPd7IAauclGdGXdqjtieaBjKvvxqz1zbZM2SHdKMXmKXOS6FqonOodlwqiudBe9ZWL6CddIhdIRiH7aA2xbfzL9iB-vr-Sgs.G2ulRaKX4CxV3tMt7OXhfnqcd59YwsDFoZIKz5yAg4U&amp;amp;dib_tag=se&amp;amp;keywords=6&amp;#43;Pin&amp;#43;FTDI&amp;#43;FT232RL&amp;#43;USB&amp;#43;To&amp;#43;Serial&amp;#43;Adapter&amp;#43;m%C3%B3dulo&amp;#43;USB&amp;#43;TO&amp;#43;TTL&amp;#43;RS232&amp;#43;cabo&amp;amp;qid=1756330702&amp;amp;s=electronics&amp;amp;sprefix=6&amp;#43;pin&amp;#43;ftdi&amp;#43;ft232rl&amp;#43;usb&amp;#43;to&amp;#43;serial&amp;#43;adapter&amp;#43;m%C3%B3dulo&amp;#43;usb&amp;#43;to&amp;#43;ttl&amp;#43;rs232&amp;#43;cabo%2Celectronics%2C223&amp;amp;sr=1-2" target="_blank" rel="noopener"
+&gt;6 Pin FTDI FT232RL USB To Serial Adapter módulo USB TO TTL RS232 cabo&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="vscode-extensions"&gt;VSCode Extensions
+&lt;/h2&gt;&lt;p&gt;VSCode is the beating heart of my coding world, supercharged by countless plugins that make every development task smoother and more powerful.&lt;/p&gt;
+&lt;p&gt;I supercharge VSCode with a curated set of extensions that elevate Z80 assembly development to the same power and convenience as modern languages like C.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;ASM Code Lens&lt;/strong&gt; A language server that enables code lens, references, hover information, symbol renaming and the outline view for assembler files.&lt;/p&gt;
+&lt;p&gt;&lt;a class="link" href="https://marketplace.visualstudio.com/items?itemName=maziac.asm-code-lens" target="_blank" rel="noopener"
+&gt;https://marketplace.visualstudio.com/items?itemName=maziac.asm-code-lens&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;DeZog&lt;/strong&gt; is a powerful Z80 debugger plugin for VSCode, offering advanced tools to make Spectrum Next development efficient and precise.&lt;/p&gt;
+&lt;p&gt;My favourite extension makes debugging easier and more powerful than ever—it’s like a Swiss Army knife for developers.&lt;/p&gt;
+&lt;p&gt;&lt;a class="link" href="https://marketplace.visualstudio.com/items?itemName=maziac.dezog" target="_blank" rel="noopener"
+&gt;https://marketplace.visualstudio.com/items?itemName=maziac.dezog&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;NEX-FileViewer&lt;/strong&gt; adds a readonly file viewer for ZX Spectrum NEX files. .nex is a special file format for loading ZX Next programs. The viewer shows registers, a memory dump and the included screen images.&lt;/p&gt;
+&lt;p&gt;&lt;a class="link" href="https://marketplace.visualstudio.com/items?itemName=maziac.nex-fileviewer" target="_blank" rel="noopener"
+&gt;https://marketplace.visualstudio.com/items?itemName=maziac.nex-fileviewer&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;Z80 Assembly meters&lt;/strong&gt; meters clock cycles and bytecode size from Z80 assembly source code.&lt;/p&gt;
+&lt;p&gt;Forget the T-state cheat sheet, instantly see instruction cycles and byte sizes as you code.&lt;/p&gt;
+&lt;p&gt;&lt;a class="link" href="https://marketplace.visualstudio.com/items?itemName=theNestruo.z80-asm-meter" target="_blank" rel="noopener"
+&gt;https://marketplace.visualstudio.com/items?itemName=theNestruo.z80-asm-meter&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;Z80 Instruction Set&lt;/strong&gt; Provides documentation of the Z80 instructions on hovering.&lt;/p&gt;
+&lt;p&gt;&lt;a class="link" href="https://marketplace.visualstudio.com/items?itemName=maziac.z80-instruction-set" target="_blank" rel="noopener"
+&gt;https://marketplace.visualstudio.com/items?itemName=maziac.z80-instruction-set&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;strong&gt;Todo&lt;/strong&gt; Tree Show TODO, FIXME, etc. comment tags in a tree view&lt;/p&gt;
+&lt;p&gt;&lt;a class="link" href="https://marketplace.visualstudio.com/items?itemName=Gruntfuggly.todo-tree" target="_blank" rel="noopener"
+&gt;https://marketplace.visualstudio.com/items?itemName=Gruntfuggly.todo-tree&lt;/a&gt;&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="resources"&gt;Resources
+&lt;/h2&gt;&lt;p&gt;There’s a massive amount of information out there, you just need to know where to look. Here’s my curated list of the essentials.&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://www.specnext.com/" target="_blank" rel="noopener"
+&gt;https://www.specnext.com/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;Spectrum Next discord server&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://luckyredfish.com/" target="_blank" rel="noopener"
+&gt;https://luckyredfish.com/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://zx.remysharp.com/" target="_blank" rel="noopener"
+&gt;https://zx.remysharp.com/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=Nphrf14ZRpI&amp;amp;list=PLK49nPX3nslseUVUj_ZYk7YL95-v4LlLY" target="_blank" rel="noopener"
+&gt;Jim Bagley tutorials&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://www.assemblytutorial.com/" target="_blank" rel="noopener"
+&gt;https://www.assemblytutorial.com/&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="http://z80-heaven.wikidot.com/math" target="_blank" rel="noopener"
+&gt;http://z80-heaven.wikidot.com/math&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://www.patreon.com/c/u27217558/home" target="_blank" rel="noopener"
+&gt;https://www.patreon.com/c/u27217558/home&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://www.patreon.com/c/mikedailly/posts" target="_blank" rel="noopener"
+&gt;https://www.patreon.com/c/mikedailly/posts&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;p&gt;These are the tools and resources that power my development workflow, but they’re by no means the only options out there. The Spectrum Next community is full of amazing alternatives, so explore, experiment, and find the setup that works best for you.&lt;/p&gt;</description></item></channel></rss>

@@ -1,0 +1,262 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Dot8 on Ping Projects</title><link>https://cardosojoao.github.io/categories/dot8/</link><description>Recent content in Dot8 on Ping Projects</description><generator>Hugo -- gohugo.io</generator><language>en-us</language><lastBuildDate>Sun, 26 Oct 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://cardosojoao.github.io/categories/dot8/index.xml" rel="self" type="application/rss+xml"/><item><title>When 8KB Isn’t Enough</title><link>https://cardosojoao.github.io/p/8k_page/</link><pubDate>Sun, 26 Oct 2025 00:00:00 +0000</pubDate><guid>https://cardosojoao.github.io/p/8k_page/</guid><description>&lt;img src="https://cardosojoao.github.io/p/8k_page/cover_8k.jpg" alt="Featured image of post When 8KB Isn’t Enough" /&gt;&lt;p&gt;The Z80 has a 16-bit address bus, which means it can only access 64KB of memory at once. On the Spectrum Next, that space is split into eight 8KB banks that you can swap in and out as needed, kind of like changing disks in a drive, but much faster. By mapping different pages of memory into those banks, I can control which parts of the game are active depending on what’s happening.&lt;/p&gt;
+&lt;p&gt;My project’s architecture is built around three big blocks:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Data (the assets and state)&lt;/li&gt;
+&lt;li&gt;Engine (the core systems)&lt;/li&gt;
+&lt;li&gt;Game (the actual logic and content)&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Each block takes up one or more memory pages. That setup worked perfectly for a while, until I hit the wall. My core engine, all packed into a single 8KB page, finally ran out of space.&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://cardosojoao.github.io/p/8k_page/build1.jpg"
+width="1364"
+height="1244"
+srcset="https://cardosojoao.github.io/p/8k_page/build1_hu_d1ad0a85fda5f7db.jpg 480w, https://cardosojoao.github.io/p/8k_page/build1_hu_878edb05d4a2b557.jpg 1024w"
+loading="lazy"
+alt="Diagram"
+class="gallery-image"
+data-flex-grow="109"
+data-flex-basis="263px"
+&gt;&lt;/p&gt;
+&lt;p&gt;I knew it was coming. I’d already split the scene renderer and audio player into separate pages, but the main engine — physics, rendering, animation — was still all in one place. So, time to rethink.&lt;/p&gt;
+&lt;p&gt;My first idea was to break the engine into multiple pages, grouping things by function: physics on one, rendering on another, collision on a third. It sounded tidy in theory… but in practice, it got messy fast.&lt;/p&gt;
+&lt;p&gt;Some systems needed both the core engine and a feature page loaded at once, which meant juggling multiple banks just to get basic things running. My mapping logic was starting to look like spaghetti.&lt;/p&gt;
+&lt;p&gt;Then, during one of my test runs, something clicked. The issue wasn’t really about code size, it was about the relationship between data and code. The core engine functions always needed to work with their data at the same time. If they lived on different pages, I was wasting banks just to keep them both accessible.&lt;/p&gt;
+&lt;p&gt;So I flipped the approach: instead of separating data and engine code, I brought them together. Each type of data (like entities) now lives in the same page as the functions that operate on it. When a page is active, everything it needs is already there , no extra mapping, no juggling banks.&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://cardosojoao.github.io/p/8k_page/build2.jpg"
+width="1364"
+height="1824"
+srcset="https://cardosojoao.github.io/p/8k_page/build2_hu_5ea57b490e39c95c.jpg 480w, https://cardosojoao.github.io/p/8k_page/build2_hu_95ce9ebfec4d87ea.jpg 1024w"
+loading="lazy"
+alt="Diagram"
+class="gallery-image"
+data-flex-grow="74"
+data-flex-basis="179px"
+&gt;&lt;/p&gt;
+&lt;p&gt;After reorganizing things this way, everything just clicked. The system ran smoother, and I even freed up around 2KB in the core engine page. That may not sound like much, but on an 8-bit machine, that’s like finding hidden treasure.&lt;/p&gt;
+&lt;p&gt;But to make this work, I had to rethink how my whole project was structured. Originally, everything was organized into those three main blocks — data, engine, and game — and that structure still makes sense. It keeps things logically separated and easier to maintain.&lt;/p&gt;
+&lt;p&gt;The solution wasn’t to abandon that structure, but to add a new build layer on top of it. This build system takes pieces from each block and organizes them according to the needs of a specific build. That way, I still keep my core architecture clean and modular, but I also gain the flexibility to assemble memory pages differently depending on the build requirements.&lt;/p&gt;
+&lt;p&gt;In the end, this approach gave me the best of both worlds: a well-structured project that’s easy to maintain, and a flexible build process that can adapt to different memory layouts or even alternative build schemas in the future.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;Every pixel, every system, and every line of code in dot8 brings me closer to capturing that perfect retro feeling — precise, responsive, and alive. What about you — how would you design your ideal retro engine?&lt;/p&gt;</description></item><item><title>Game Physics</title><link>https://cardosojoao.github.io/p/engine-phsyics/</link><pubDate>Tue, 19 Aug 2025 00:00:00 +0000</pubDate><guid>https://cardosojoao.github.io/p/engine-phsyics/</guid><description>&lt;img src="https://cardosojoao.github.io/p/engine-phsyics/cover.jpg" alt="Featured image of post Game Physics" /&gt;&lt;h2 id="inside-the-dot8-physics-engine"&gt;Inside the dot8 Physics Engine
+&lt;/h2&gt;&lt;p&gt;Building a physics engine isn’t just about moving objects—it’s about creating a consistent and believable world. Rigidbodies define how objects react to forces, gravity, and collisions, while colliders determine the shape and boundaries for those interactions. Together, they form the backbone of any physics simulation, enabling everything from subtle character movement to complex dynamic environments. Understanding how these components work together is key for developers who want precision, performance, and realism in their games. Mastering these fundamentals isn’t just a technical skill—it’s what transforms code into immersive experiences.&lt;/p&gt;
+&lt;h3 id="rigidbody-motion-in-action"&gt;Rigidbody: Motion in Action
+&lt;/h3&gt;&lt;p&gt;A Rigidbody defines how an entity moves in the game world:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Velocity - 2D vector for movement per frame.&lt;/li&gt;
+&lt;li&gt;Acceleration - Enables force-based motion.&lt;/li&gt;
+&lt;li&gt;Gravity - Global or per object (set to 0 for flying entities).&lt;/li&gt;
+&lt;li&gt;Damping/Friction - Gradually reduces speed for smooth stops.&lt;/li&gt;
+&lt;li&gt;Integration Step - Updates position each frame with a fixed timestep.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;span class="lnt"&gt;13
+&lt;/span&gt;&lt;span class="lnt"&gt;14
+&lt;/span&gt;&lt;span class="lnt"&gt;15
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-text" data-lang="text"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;struct Rigidbody
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ID db 0
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ObjectID db 0
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Flags db 0
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;VelocityX dw 0
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;VelocityY dw 0
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;AccelerationX dw 0
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;AccelerationY dw 0
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;FrictionX dw 0
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;FrictionY dw 0
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ConstantAcceleration dw 0
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ForceDuration db 0
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;State db 0
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;FSM dw 0
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; ends
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Key Insight: A Rigidbody doesn’t detect collisions — it only updates position based on forces.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="collider-the-silent-watcher"&gt;Collider: The Silent Watcher
+&lt;/h3&gt;&lt;p&gt;-A Collider focuses on where interactions happen. In retro engines, this is usually an AABB (Axis-Aligned Bounding Box):&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Offset - Position offset from the entity’s origin to align with the sprite.&lt;/li&gt;
+&lt;li&gt;Size - Defines collision area.&lt;/li&gt;
+&lt;li&gt;Trigger Flag - Marks collider as “non-physical” (no bounce/push, only events).&lt;/li&gt;
+&lt;li&gt;Layer/Mask - Filters what this collider interacts with (e.g., Player layer vs. Enemy layer).&lt;/li&gt;
+&lt;li&gt;Response - None (for triggers) or simple reaction (bounce, stop).&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-text" data-lang="text"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; struct Collider
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ID db
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ObjectID db 0
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Flags db 0
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;OffsetX db 0
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;OffsetY db 0
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Width db 0
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Height db 0
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Layer db 0
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;EventCollision dw 0
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;EventTrigger db 0
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; ends
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Key Insight: A Collider never moves objects — it only reports contacts.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;&lt;video src="colliders.mp4" width="480" height="360" controls&gt;&lt;/video&gt;&lt;/p&gt;
+&lt;p&gt;See Colliders in action&lt;/p&gt;
+&lt;hr&gt;
+&lt;h3 id="why-keep-them-separate"&gt;Why Keep Them Separate?
+&lt;/h3&gt;&lt;p&gt;Splitting Rigidbody and Collider gives dot8:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Modularity - An object can have physics without collision, or vice versa.&lt;/li&gt;
+&lt;li&gt;Performance - Collider checks can be optimized separately.&lt;/li&gt;
+&lt;li&gt;Flexibility - Triggers and sensors can exist without affecting motion.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;p&gt;Rigidbodies and Colliders work together to bring physics to life. One controls movement, the other defines interaction. Simple, but powerful. How will you use them in your game?&lt;/p&gt;</description></item><item><title>Dot8 - Engine Sub Systems</title><link>https://cardosojoao.github.io/p/engine-sub-system/</link><pubDate>Tue, 12 Aug 2025 00:00:00 +0000</pubDate><guid>https://cardosojoao.github.io/p/engine-sub-system/</guid><description>&lt;img src="https://cardosojoao.github.io/p/engine-sub-system/cover.jpg" alt="Featured image of post Dot8 - Engine Sub Systems" /&gt;&lt;p&gt;The dot8 retro game engine is composed of distinct subsystems, each designed with a clear role in mind to ensure smooth collaboration and maintainability. By assigning dedicated responsibilities—such as rendering graphics, processing user input, or managing audio—these modular components interact harmoniously while remaining independent in their logic and operation. This separation not only streamlines development and debugging but also allows for flexibility in updating or swapping out features without disrupting the whole system. The result is an engine where each piece does its job efficiently, contributing to a cohesive and robust framework for building classic gaming experiences.&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://cardosojoao.github.io/p/engine-sub-system/diagram.jpg"
+width="894"
+height="553"
+srcset="https://cardosojoao.github.io/p/engine-sub-system/diagram_hu_647824bd086e0a79.jpg 480w, https://cardosojoao.github.io/p/engine-sub-system/diagram_hu_1f9446fb542e5b86.jpg 1024w"
+loading="lazy"
+alt="Diagram"
+class="gallery-image"
+data-flex-grow="161"
+data-flex-basis="387px"
+&gt;&lt;/p&gt;
+&lt;h2 id="physic-engine"&gt;Physic Engine
+&lt;/h2&gt;&lt;p&gt;The physics engine handles how objects move and react to forces like velocity and gravity. It updates positions each frame and supports basic dynamics for things like jumping or falling, while keeping performance in mind for 8-bit hardware.&lt;/p&gt;
+&lt;h2 id="audio-system"&gt;Audio System
+&lt;/h2&gt;&lt;p&gt;The audio system plays music and sound effects using PT3 files. It can trigger sounds from gameplay events and supports music playback that runs independently of the main game loop, giving life to the game world.&lt;/p&gt;
+&lt;h2 id="input-system"&gt;Input System
+&lt;/h2&gt;&lt;p&gt;The input system reads controls from the keyboard or joystick and translates them into game actions. It supports responsive input handling for player movement, menu navigation, or interactive gameplay triggers.&lt;/p&gt;
+&lt;h2 id="render-engine"&gt;Render Engine
+&lt;/h2&gt;&lt;p&gt;The render engine draws all visible objects to the screen based on their position and sprite. It ensures correct layering and only draws what&amp;rsquo;s necessary, keeping the frame rate smooth and the visuals crisp.&lt;/p&gt;
+&lt;h2 id="sprite-system"&gt;Sprite System
+&lt;/h2&gt;&lt;p&gt;The sprite system manages visual tiles and frame data used to display characters, enemies, and effects. It pulls graphics from sprite sheets and handles flipping or offsetting for clean and flexible rendering.&lt;/p&gt;
+&lt;h2 id="animation-system"&gt;Animation System
+&lt;/h2&gt;&lt;p&gt;This system controls how sprites animate over time. It changes frames based on timing and states, allowing characters to walk, jump, or attack smoothly. It also supports keyframe-based events during animations.&lt;/p&gt;
+&lt;h2 id="entity-manager"&gt;Entity Manager
+&lt;/h2&gt;&lt;p&gt;The entity manager keeps track of all game objects. It handles creating, updating, and removing objects efficiently during gameplay and ensures each object is correctly processed in the game loop.&lt;/p&gt;
+&lt;h2 id="scene-manager"&gt;Scene Manager
+&lt;/h2&gt;&lt;p&gt;The scene manager loads and switches between different levels or screens. It resets objects, positions the camera, and prepares the environment when moving between gameplay, menus, or cutscenes&lt;/p&gt;
+&lt;h2 id="collision-system"&gt;Collision System
+&lt;/h2&gt;&lt;p&gt;The collision system checks for overlaps between objects, like when the player hits a wall or enemy. It uses simple box checks (AABB) and helps the game react to hits, blocks, or pickups instantly.&lt;/p&gt;
+&lt;h2 id="trigger--event-system"&gt;Trigger / Event System
+&lt;/h2&gt;&lt;p&gt;This system manages special zones or timed actions. When the player steps on a trigger or a timer finishes, it fires an event—like opening a door, playing a sound, or switching animation state.&lt;/p&gt;
+&lt;h2 id="camera-system"&gt;Camera System
+&lt;/h2&gt;&lt;p&gt;The camera system follows the player or focuses on key areas of the scene. It ensures that only part of the world is visible on screen, adding cinematic control and smooth scrolling to the game.&lt;/p&gt;
+&lt;h2 id="asset-loader"&gt;Asset Loader
+&lt;/h2&gt;&lt;p&gt;The asset loader handles loading sprites, music, level data, and configuration from memory or external files. It prepares everything needed before the game starts or when switching scenes.&lt;/p&gt;
+&lt;h2 id="debug-tools"&gt;Debug Tools
+&lt;/h2&gt;&lt;p&gt;The debug tools provide visibility into what’s happening inside the engine. They can show object positions, active collisions, memory usage, or FPS counters on screen. These tools help test levels, tune performance, and catch bugs quickly—especially useful during development on limited hardware like the Spectrum Next.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;As I bring all these systems together, I’m turning the dot8 retro game engine into my creative playground right now. Whether I’m debugging, exploring, or building brand new worlds, the engine lets me bring my ideas to life with excitement and ease. I’m proving that with smart design and a passion for games, even the simplest tools can make something truly fun—right here, in this very moment.&lt;/p&gt;</description></item><item><title>dot8 - Entity Manager</title><link>https://cardosojoao.github.io/p/engine-entities/</link><pubDate>Mon, 04 Aug 2025 00:00:00 +0000</pubDate><guid>https://cardosojoao.github.io/p/engine-entities/</guid><description>&lt;img src="https://cardosojoao.github.io/p/engine-entities/cover4.jpg" alt="Featured image of post dot8 - Entity Manager" /&gt;&lt;p&gt;&lt;img src="https://cardosojoao.github.io/p/engine-entities/diagram.jpg"
+width="2208"
+height="648"
+srcset="https://cardosojoao.github.io/p/engine-entities/diagram_hu_c4f1eb00a440514e.jpg 480w, https://cardosojoao.github.io/p/engine-entities/diagram_hu_1db83c04d2f8d35a.jpg 1024w"
+loading="lazy"
+alt="Diagram"
+class="gallery-image"
+data-flex-grow="340"
+data-flex-basis="817px"
+&gt;&lt;/p&gt;
+&lt;p&gt;In the engine, entities materialized as game objects, which serve as containers for all relevant data and behaviour. Each game object typically holds references to components such as sprite, physics body, collider, and logic scripts. This modular design allows flexibility in defining varied entities—like players, enemies, items, or triggers—by composing them from shared building blocks.&lt;/p&gt;
+&lt;h2 id="game-object-properties"&gt;Game object properties
+&lt;/h2&gt;&lt;h3 id="id"&gt;Id
+&lt;/h3&gt;&lt;p&gt;Is a distinct, engine-assigned identifier given to each game object at creation time. It ensures that every object can be individually referenced, tracked, or compared, even if multiple objects share the same type, tag, or position.&lt;/p&gt;
+&lt;h3 id="tag"&gt;Tag
+&lt;/h3&gt;&lt;p&gt;A short identifier string or byte value that describes the object’s logical category (e.g., &amp;ldquo;enemy&amp;rdquo;, &amp;ldquo;bullet&amp;rdquo;, &amp;ldquo;checkpoint&amp;rdquo;). Tags are used to group or filter game objects during logic checks, such as collision response or trigger activation. Unlike class types, tags are flexible and can be changed at runtime.&lt;/p&gt;
+&lt;h3 id="flags"&gt;Flags
+&lt;/h3&gt;&lt;p&gt;Is a bitfield property that stores multiple binary (on/off) attributes for a game object using a single byte or word. Each bit in the flags value represents a specific toggleable property or state, such as enabled, or don’t destroy.&lt;/p&gt;
+&lt;h3 id="parent"&gt;Parent
+&lt;/h3&gt;&lt;p&gt;is a reference to another game object that acts as the logical or spatial parent of this object. It links a child object to its parent, allowing it to inherit position, state, or behaviour hierarchically.&lt;/p&gt;
+&lt;h3 id="x"&gt;X
+&lt;/h3&gt;&lt;p&gt;Represents the object&amp;rsquo;s horizontal position within the scene or world coordinate system. It defines how far the object is placed from the left edge of the scene, measured in pixels.&lt;/p&gt;
+&lt;h3 id="y"&gt;Y
+&lt;/h3&gt;&lt;p&gt;Represents the object&amp;rsquo;s vertical position within the scene or world coordinate system. It defines how far the object is placed from the top edge of the scene, measured in pixels.&lt;/p&gt;
+&lt;h3 id="fsm"&gt;FSM
+&lt;/h3&gt;&lt;p&gt;A Finite State Machine (FSM) is a way to control behaviour by dividing it into a fixed number of states, where each state defines what the object is doing. At any moment, the object is in one state, and it can switch to another based on conditions or events.&lt;/p&gt;
+&lt;h3 id="fsm-state"&gt;FSM State
+&lt;/h3&gt;&lt;p&gt;is a value that represents the current behaviour or mode of a game object within a finite state machine (FSM). Each value corresponds to a specific state, such as idle, walking, jumping, or attacking.&lt;/p&gt;
+&lt;h3 id="collider"&gt;Collider
+&lt;/h3&gt;&lt;p&gt;The collider component defines the physical size and collision behaviour of a game object. It can be assigned to both rigid and non-rigid entities. The collider does not handle physics simulation itself (e.g. gravity or forces) but acts as a collision shape and provides hooks for event responses when overlapping or contacting other objects.&lt;/p&gt;
+&lt;h3 id="rigidbody"&gt;Rigidbody
+&lt;/h3&gt;&lt;p&gt;The Rigidbody component controls how a game object moves over time based on velocity, applied forces, and optionally gravity. It defines dynamic motion separate from collision boundaries, allowing for smooth, physically influenced movement like falling, sliding, or being pushed.&lt;/p&gt;
+&lt;h3 id="sprite"&gt;Sprite
+&lt;/h3&gt;&lt;p&gt;The Sprite component defines how a game object is visually rendered on screen. It contains information about the sprite’s size, position offset, which spritesheet to use, and the current frame to display from the spritesheet.&lt;/p&gt;
+&lt;h3 id="animation"&gt;Animation
+&lt;/h3&gt;&lt;p&gt;The Animation component manages how a game object’s sprite is animated over time. It tracks the current animation state, controls the frame rate, steps through keyframes, and handles event triggers tied to specific frames. It also includes a small finite state machine (FSM) to manage transitions between different animations (e.g., idle, walk, jump, attack).&lt;/p&gt;
+&lt;h3 id="timer"&gt;Timer
+&lt;/h3&gt;&lt;p&gt;The Timer component is used to trigger events after a specified number of frames. It can be configured to fire once or loop continuously, making it ideal for timed effects, delays, cooldowns, or periodic actions.&lt;/p&gt;
+&lt;h3 id="path"&gt;Path
+&lt;/h3&gt;&lt;p&gt;The Path component moves a game object along a predefined series of points, creating automated. It supports a custom speed, directional travel, and options to run once, loop, or ping-pong back and forth.&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;span class="lnt"&gt;13
+&lt;/span&gt;&lt;span class="lnt"&gt;14
+&lt;/span&gt;&lt;span class="lnt"&gt;15
+&lt;/span&gt;&lt;span class="lnt"&gt;16
+&lt;/span&gt;&lt;span class="lnt"&gt;17
+&lt;/span&gt;&lt;span class="lnt"&gt;18
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-text" data-lang="text"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; struct Object
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ID db 0
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Tag db 0
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Flags db 0
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;PosX dw 0
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;PosY dw 0
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Parent db 0
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;State db 0
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;FSM dw 0
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;SpriteComp db 0
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;PhysicComp db 0
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;AnimationComp db 0
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ColliderComp db 0
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;PathComp db 0
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;TimerComp db 0
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; ends
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;The &lt;strong&gt;Object&lt;/strong&gt; structure holds all the key data for each entity in the game. It is stored as a fixed-size block in memory, making it easy and fast to access in assembly. This simple layout helps the engine update and draw many objects efficiently, while keeping the code clean and organized.&lt;/p&gt;
+&lt;hr&gt;
+&lt;p&gt;As I continue building the dot8 engine, I constantly find myself relying on the Entity Manager it’s really the heartbeat of everything. Right now, it’s the system that keeps track of all active objects in the scene, from enemies and bullets to triggers and NPCs. It decides which entities get updated, drawn, or removed each frame. Without it, the game world would fall apart. It’s not flashy, but it quietly orchestrates the entire flow of gameplay, ensuring every component knows where it belongs. And as the engine grows, the Entity Manager keeps proving itself as the glue that holds all the pieces together.&lt;/p&gt;</description></item></channel></rss>
