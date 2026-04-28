@@ -40,7 +40,7 @@ jobs:
                   extended: true
 
             - name: Build
-              run: hugo --minify --gc -verbose --debug --templateMetrics
+              run: hugo --minify --gc -verbose --debug
 
             - name: Deploy 🚀
               uses: JamesIves/github-pages-deploy-action@v4
