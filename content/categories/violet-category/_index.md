@@ -1,7 +1,6 @@
 ---
 title: violet
 description: violet game development journey
-image:
 
 # Badge style
 style:
