@@ -41,7 +41,6 @@ jobs:
 
             - name: Disable layouts
               run: mv layouts layouts_backup
-                   hugo --logLevel debug
 
             - name: Build
               run: hugo --minify --gc --logLevel debug --templateMetrics --templateMetricsHints
