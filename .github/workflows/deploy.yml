@@ -39,9 +39,6 @@ jobs:
                   hugo-version: "latest"
                   extended: true
 
-            - name: Disable layouts
-              run: mv layouts layouts_backup
-
             - name: Build
               run: hugo --minify --gc --logLevel debug --templateMetrics --templateMetricsHints
 
