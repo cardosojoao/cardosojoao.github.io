@@ -19,7 +19,7 @@ subtitle = "Exploring the Craft of 8-Bit Assembly Game Programming"
 [sidebar.avatar]
 enabled = true
 local = true
-src = "img/Bapa.png"
+src = "assets/img/Bapa.png"
 
 [article]
 headingAnchor = false
